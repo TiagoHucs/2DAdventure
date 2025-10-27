@@ -1,6 +1,7 @@
 package org.hucs;
 
 import org.hucs.entity.Player;
+import org.hucs.tiles.TileManager;
 
 import javax.swing.*;
 import java.awt.*;
@@ -11,22 +12,18 @@ public class GamePanel extends JPanel implements Runnable{
     final int scale = 3;
 
     public final int tileSize = originalTileSize * scale;
-    final int maxScreenCol = 16; // ajuste quantas colunas quer
-    final int maxScreenRow = 12; // ajuste quantas linhas quer
-    final int screenWidth = tileSize * maxScreenCol; //768px
-    final int screenHeight = tileSize * maxScreenRow; //576px
-    final int fps = 60;
+    public final int maxScreenCol = 16; // ajuste quantas colunas quer
+    public final int maxScreenRow = 12; // ajuste quantas linhas quer
+    public final int screenWidth = tileSize * maxScreenCol; //768px
+    public final int screenHeight = tileSize * maxScreenRow; //576px
+    public final int fps = 60;
 
+    TileManager tm = new TileManager(this);
     KeyHandler keyHandler = new KeyHandler();
     Thread gameThread;
 
     //create player
     Player player = new Player(this,keyHandler);
-
-    // player default position
-    int playerX = 100;
-    int playerY = 100;
-    int playerSpeed = 4;
 
     public GamePanel() {
 
@@ -81,7 +78,10 @@ public class GamePanel extends JPanel implements Runnable{
     public void paintComponent(Graphics g){
         super.paintComponent(g);
         Graphics2D g2 = (Graphics2D) g;
+
+        tm.draw(g2);
         player.draw(g2);
+
         g2.dispose();
     }
 }
